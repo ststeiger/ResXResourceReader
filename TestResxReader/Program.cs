@@ -5,6 +5,7 @@ namespace TestResxReader
 
     class Program
     {
+#if false
 
         public static void ReadRessourceFile()
         {
@@ -29,12 +30,38 @@ namespace TestResxReader
             //Close the reader. '
             rsxr.Close();
         }
-
+#endif
 
         static void Main(string[] args)
         {
-            ReadRessourceFile();
-            System.Console.WriteLine("Hello World!");
+            // ReadRessourceFile();
+            string filename = @"C:\Program Files\paint.net\resx\PaintDotNet.Strings.3.resx";
+
+            // .NET-Core resources are different ? 
+            System.Resources.ResourceReader rsxr = new System.Resources.ResourceReader(filename);
+
+            System.Resources.ResourceManager RM = new System.Resources.ResourceManager("basename", System.Reflection.Assembly.GetExecutingAssembly());
+
+            // ResourceNamespace.ResxFileName.ResourceManager.GetString("ResourceKey");
+
+            var rs = RM.GetResourceSet(System.Globalization.CultureInfo.CurrentCulture, false, false);
+            // rs.GetDefaultReader().
+            // http://www.lhotka.net/weblog/NETCoreUsingExistingResxResourceFile.aspx
+
+
+            foreach (System.Collections.DictionaryEntry d in rsxr)
+            {
+                if (d.Key != null)
+                    System.Console.Write(d.Key.ToString() + ":\t");
+
+                if (d.Value != null)
+                    System.Console.Write(d.Value.ToString());
+
+                System.Console.WriteLine();
+            }
+
+            System.Console.WriteLine(" --- Press any key to continue --- ");
+            System.Console.ReadKey();
         }
 
 
